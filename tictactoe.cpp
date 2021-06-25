@@ -42,7 +42,7 @@ bool isGameEnd()
 {
 	if(turns==0)
 		return true;
-	else if(turns==1)//If only left 1move there will be no chance for neither X nor O to win
+	else if(turns==1 && 'O'!=isMatch(board))//If only left 1move there will be no chance for neither X nor O to win
 	{
 		cout<<"Game has been tied...\n";
 		return true;
@@ -205,6 +205,7 @@ void computer()
 		if(br)
 			return;
 		random();
+		
 	}
 }
 
