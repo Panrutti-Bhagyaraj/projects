@@ -1,39 +1,38 @@
 #include<bits/stdc++.h>
 using namespace std;
-char board[3][3]={{'-','-','-'},{'-','-','-'},{'-','-','-'}};
-char resultBoard[3][3]={{'-','-','-'},{'-','-','-'},{'-','-','-'}};
+char board[9]={'-','-','-','-','-','-','-','-','-'};
+char resultBoard[9]={'-','-','-','-','-','-','-','-','-'};
 int turns=9;
 //printing the board
 void printBoard()
 {
-	for(int i=0;i<3;i++)
+	for(int i=0;i<9;i++)
 	{
-		for(int j=0;j<3;j++)
-			cout<<board[i][j]<<" ";
-		cout<<"\n";
+			cout<<board[i]<<" ";
+		if((i+1)%3==0)
+			cout<<"\n";
 	}
 }
 
 //checking for match
-char isMatch(char board[3][3])
+char isMatch(char board[9])
 {
 	for(int i=0;i<3;i++)
 	{
-		
-		if(board[i][0] == board[i][1] && board[i][1]==board[i][2] && board[i][1]!='-')
-			return board[i][0];	
+		if(board[3*i]==board[3*i+1] && board[3*i+1]==board[3*i+2] && board[3*i]!='-')
+			return board[3*i];	
 	}
 	
 	for(int i=0;i<3;i++)
 	{
-		if(board[0][i] == board[1][i] && board[1][i]==board[2][i] && board[2][i]!='-')
-			return board[0][i];	
+		if(board[i] == board[i+3] && board[i+3]==board[i+6] && board[i+3]!='-')
+			return board[i+3];	
 	}
 	
-	if(board[0][0]==board[1][1] && board[2][2]==board[1][1] && board[2][2]!='-')
-		return board[0][0];
-	if(board[0][2]==board[1][1] && board[1][1]==board[2][0] && board[1][1]!='-')
-		return board[1][1];
+	if(board[0]==board[4] && board[4]==board[8] && board[4]!='-')
+		return board[4];
+	if(board[2]==board[4] && board[4]==board[6] && board[4]!='-')
+		return board[4];
 
 	return 'N';//NONE
 }
@@ -53,136 +52,55 @@ bool isGameEnd()
 //inserting X in board
 char insert(int pos)
 {
-	if(pos==1)
-	{
-		board[0][0]='X';
-		resultBoard[0][0]='X';
-	}
-	else if(pos==2)
-	{
-		board[0][1]='X';
-		resultBoard[0][1]='X';
-	}
-	else if(pos==3)
-	{
-		board[0][2]='X';
-		resultBoard[0][2]='X';
-	}
-	else if(pos==4)
-	{
-		board[1][0]='X';
-		resultBoard[1][0]='X';
-
-	}
-	else if(pos==5)
-	{
-		board[1][1]='X';
-		resultBoard[1][1]='X';
-	}
-	else if(pos==6)
-	{
-		board[1][2]='X';
-		resultBoard[1][2]='X';
-	}
-	else if(pos==7)
-	{
-		board[2][0]='X';
-		resultBoard[2][0]='X';
-	}
-	else if(pos==8)
-	{
-		board[2][1]='X';
-		resultBoard[2][1]='X';
-	}
-	else if(pos==9)
-	{
-		board[2][2]='X';
-		resultBoard[2][2]='X';
-	}
+	
+	board[pos-1]='X';
+	resultBoard[pos-1]='X';
 	return isMatch(board);
 }
 //checking intial position which was entered by user is empty or not
 bool checkBoard(int pos)
 {
-	if(pos==1)
-	{
-		return board[0][0]=='X' || board[0][0]=='O';
-	}
-	else if(pos==2)
-	{
-		return board[0][1]=='X' || board[0][1]=='O';
-	}
-	else if(pos==3)
-	{
-		return board[0][2]=='X' || board[0][2]=='O';
-	}
-	else if(pos==4)
-	{
-		return board[1][0]=='X' || board[1][0]=='O';
-	}
-	else if(pos==5)
-	{
-		return board[1][1]=='X' || board[1][1]=='O';
-	}
-	else if(pos==6)
-	{
-		return board[1][2]=='X' || board[1][2]=='O';
-	}
-	else if(pos==7)
-	{
-		return board[2][0]=='X' || board[2][0]=='O';
-	}
-	else if(pos==8)
-	{
-		return board[2][1]=='X' || board[2][1]=='O';
-	}
-	else if(pos==9)
-	{
-		return board[2][2]=='X' || board[2][2]=='O';
-	}
-	return true;
+	
+	return board[pos-1]=='X' || board[pos-1]=='O';
 }
 //generating random move for PC
 void random()
 {
 	srand(time(0));
-		int i= rand()%3, j=rand()%3;
-		while(board[i][j]=='X' || board[i][j]=='O')
+		int i= rand()%3;
+		while(board[i]=='X' || board[i]=='O')
 		{
-			i= rand()%3; j=rand()%3;	
+			i= rand()%3;	
 		} 
-		board[i][j]='O';
+		board[i]='O';
+		resultBoard[i]='O';
 		turns--;	
 }
-//computer checking the winner by playing against itself
+//PC checking the winner by playing against itself
 bool checkWin(char c)
 {
-	
-		for(int i=0;i<3;i++)
+		for(int i=0;i<9;i++)
 		{
-			for(int j=0;j<3;j++)
-			{
-				if(board[i][j]=='-')
+			if(board[i]=='-')
 				{
-					char temp = resultBoard[i][j],res;
-					resultBoard[i][j]=c;
+					char temp = resultBoard[i],res;
+					resultBoard[i]=c;
 					res = isMatch(resultBoard);
 					if(res == c)
 					{
-						board[i][j]='O';
+						board[i]='O';
 						if(c=='X')
 						{
-							resultBoard[i][j]='O';
+							resultBoard[i]='O';
 						}
 						turns--;
 						return true;
 					}
 					else
 					{
-						resultBoard[i][j]=temp;
+						resultBoard[i]=temp;
 					}
 				}
-			}
 		}
 	return false;
 }
@@ -196,14 +114,15 @@ void computer()
 	}
 	else
 	{
-		bool br = checkWin('O');
+		bool br = checkWin('O');//Chech if there is a chance to WIN for PC
 		if(br)
 			return;
 
-		br = checkWin('X');
+		br = checkWin('X');//If no chance of having win for PC then tackle the Player X
 		
 		if(br)
 			return;
+
 		random();
 		
 	}
