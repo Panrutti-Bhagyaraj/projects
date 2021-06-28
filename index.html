@@ -1,8 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredericka+the+Great&display=swap" rel="stylesheet"> 
 	<meta charset="utf-8"/>
 	<style type="text/css">
+	body{
+		font-family: 'Fredericka the Great', cursive;
+	}
 		table,tr,td{
 			border-width: 2.5px;
 			border-style: solid;
@@ -22,7 +28,6 @@
 		div
 		{
 			font-size: 37.5px;
-			font-family: cursive;
 			font-weight: bold;
 		}
 	</style>
@@ -119,13 +124,13 @@
 
 			return 'N';//NONE
 		}
-		function isGameEnd()
+		function isGameEnd(s)
 		{
 			if(turns==0)
-				return true;
+				return Boolean(true);
 			else if(turns==1 && 'O'!=isMatch(board))//If only left 1move there will be no chance for neither X nor O to win
 			{
-				alert("Game has been tied...");
+				document.getElementById(s).innerHTML='X';
 				return Boolean(true);
 			}
 			return Boolean(false);
@@ -256,7 +261,7 @@
 		}
 		function display(element,s)
 		{
-			if(isGameEnd())
+			if(isGameEnd(s))
 			{
 				replay();
 			}
