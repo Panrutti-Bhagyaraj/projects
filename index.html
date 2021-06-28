@@ -168,20 +168,19 @@
 		}
 		function random()
 		{
-	  		let i = Math.floor(Math.random() * (9 - 0 + 1) ) ;
+	  		let i = Math.floor(Math.random() * (8 - 0 + 1) ) ;
 	  		
 				while(board[i]=='X' || board[i]=='O')
 				{
-					i= Math.floor(Math.random() * (9 - 0 + 1) ) ;	
+					i= Math.floor(Math.random() * (8 - 0 + 1) ) ;	
 				} 
 				board[i]='O';
 				resultBoard[i]='O';
-				if(i+1 <=9)
-				{
+				
 					document.getElementById(i+1).innerHTML='O';
 					document.getElementById(i+1).style.color = 'red';
 					document.getElementById(i+1).style.pointerEvents = 'none';
-				}
+				
 				turns--;
 		}
 		function checkWin(c)
