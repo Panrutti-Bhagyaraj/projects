@@ -22,7 +22,7 @@
 		div
 		{
 			font-size: 37.5px;
-			font-family: serif;
+			font-family: cursive;
 			font-weight: bold;
 		}
 	</style>
@@ -141,6 +141,7 @@
 			resultBoard[pos-1]='X';
 			element.innerHTML='X';
 			element.style.color = 'darkblue';
+			document.getElementById(pos).style.pointerEvents = 'none';
 			//return isMatch(board);
 			return 'N';
 		}
@@ -173,6 +174,7 @@
 				{
 					document.getElementById(i+1).innerHTML='O';
 					document.getElementById(i+1).style.color = 'red';
+					document.getElementById(i+1).style.pointerEvents = 'none';
 				}
 				turns--;
 		}
@@ -191,6 +193,7 @@
 								board[i]='O';
 								document.getElementById(i+1).innerHTML='O';
 								document.getElementById(i+1).style.color = 'red';
+								document.getElementById(i+1).style.pointerEvents = 'none';
 								if(c=='X')
 								{
 									resultBoard[i]='O';
