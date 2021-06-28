@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+	<style type="text/css">
+		table,tr,td{
+			border-width: 2.5px;
+			border-style: solid;
+			text-align: center;
+		}
+		table
+		{
+			margin: 100px auto;
+			background: black;
+		}
+		td
+		{
+			background: whitesmoke;
+			width: 75px;
+			height: 75px;
+		}
+		div
+		{
+			font-size: 37.5px;
+			font-family: cursive;
+			font-weight: bold;
+		}
+	</style>
+</head>
+<body>
+	<center><h1><span style="color: red;"><u>TIC</u></span> <span style="color: blue;"><u>TAC</u></span> <span style="color: green;"><u>TOE</u></span></h1><center>
+	<table>
+		<tr>
+			<td>
+				<div id='1' onclick="display(this,'1')">
+					&nbsp;
+				</div>
+			</td>
+			<td>
+				<div id='2' onclick="display(this,'2')">
+					&nbsp;
+				</div>
+			</td>
+			<td>
+				<div id='3' onclick="display(this,'3')">
+					&nbsp;
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div id='4' onclick="display(this,'4')">
+					&nbsp;
+				</div>
+			</td>
+			<td>
+				<div id='5' onclick="display(this,'5')">
+					&nbsp;
+				</div>
+			</td>
+			<td>
+				<div id='6' onclick="display(this,'6')">
+					&nbsp;
+				</div>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div id='7' onclick="display(this,'7')">
+					&nbsp;
+				</div>
+			</td>
+			<td>
+				<div id='8' onclick="display(this,'8')">
+					&nbsp;
+				</div>
+			</td>
+			<td>
+				<div id='9' onclick="display(this,'9')">
+					&nbsp;
+				</div>
+			</td>
+		</tr>
+	</table>
+
+	<script type="text/javascript">
+		
+		var i=0;
+		const board=['-','-','-','-','-','-','-','-','-'];
+		const resultBoard=['-','-','-','-','-','-','-','-','-'];
+		var turns=9;
+		function printBoard()
+		{
+			for(var i=0;i<3;i++)
+			{
+					console.log(board[3*i]+" "+board[3*i+1]+" "+board[3*i+2]);
+				
+					console.log("\n");
+			}
+		}
+		function isMatch(board)
+		{
+			for(var i=0;i<3;i++)
+			{
+				if(board[3*i]==board[3*i+1] && board[3*i+1]==board[3*i+2] && board[3*i]!='-')
+					return board[3*i];	
+			}
+			
+			for(var i=0;i<3;i++)
+			{
+				if(board[i] == board[i+3] && board[i+3]==board[i+6] && board[i+3]!='-')
+					return board[i+3];	
+			}
+			
+			if(board[0]==board[4] && board[4]==board[8] && board[4]!='-')
+				return board[4];
+			if(board[2]==board[4] && board[4]==board[6] && board[4]!='-')
+				return board[4];
+
+			return 'N';//NONE
+		}
+		function isGameEnd()
+		{
+			if(turns==0)
+				return true;
+			else if(turns==1 && 'O'!=isMatch(board))//If only left 1move there will be no chance for neither X nor O to win
+			{
+				alert("Game has been tied...");
+				return Boolean(true);
+			}
+			return Boolean(false);
+		}
+		function checkBoard(pos)
+		{
+			return Boolean(board[pos-1]=='X' || board[pos-1]=='O');
+		}
+		function insert(element,pos)
+		{
+			
+			board[pos-1]='X';
+			resultBoard[pos-1]='X';
+			element.innerHTML='X';
+			element.style.color = 'darkblue';
+			//return isMatch(board);
+			return 'N';
+		}
+		function insertInBoard(element,pos)
+		{
+			if(!checkBoard(pos))
+			{
+				var res = insert(element,pos);
+				if(res!='N')
+				{
+					alert("Player "<<res<<" has won the game:)");
+					return Boolean(true);
+				}
+				turns--;
+				//computer();
+			}
+			return Boolean(false);
+		}
+		function random()
+		{
+	  		let i = Math.floor(Math.random() * (9 - 0 + 1) ) ;
+	  		
+				while(board[i]=='X' || board[i]=='O')
+				{
+					i= Math.floor(Math.random() * (9 - 0 + 1) ) ;	
+				} 
+				board[i]='O';
+				resultBoard[i]='O';
+				if(i+1 <=9)
+				{
+					document.getElementById(i+1).innerHTML='O';
+					document.getElementById(i+1).style.color = 'red';
+				}
+				turns--;
+		}
+		function checkWin(c)
+		{
+				for(var i=0;i<9;i++)
+				{
+					if(board[i]=='-')
+						{
+							var temp = resultBoard[i];
+							var res;
+							resultBoard[i]=c;
+							res = isMatch(resultBoard);
+							if(res == c)
+							{
+								board[i]='O';
+								document.getElementById(i+1).innerHTML='O';
+								document.getElementById(i+1).style.color = 'red';
+								if(c=='X')
+								{
+									resultBoard[i]='O';
+								}
+								turns--;
+								return Boolean(true);
+							}
+							else
+							{
+								resultBoard[i]=temp;
+							}
+						}
+				}
+			return Boolean(false);
+		}
+		function computer()
+		{
+			if(turns==8)
+			{
+				random();
+			}
+			else
+			{
+				let br = checkWin('O');//Chech if there is a chance to WIN for PC
+				if(Boolean(br))
+					return;
+
+				br = checkWin('X');//If no chance of having win for PC then tackle the Player X
+				
+				if(Boolean(br))
+					return;
+
+				random();
+				
+			}
+		}
+		function checkMatch()
+		{
+			let res = isMatch(board);
+				if(res!='N')
+				{
+					return [true,res];
+				}
+			return [false,res];
+		}
+		function disable()
+		{
+			for(var i=1;i<=9;i++)
+			{
+				document.getElementById(i).style.pointerEvents = 'none';
+			}
+		}
+		function replay()
+		{
+			let x = confirm("Want to start a New game!!!");
+				if(x == true)
+				{
+					history.go(0);
+				}
+		}
+		function display(element,s)
+		{
+			if(isGameEnd())
+			{
+				replay();
+			}
+			else
+			{
+					insertInBoard(element,s);
+					let end = checkMatch();
+					if(end[0] && end[1]=='X')
+					{
+						alert("Player "+end[1]+" has won the game");
+						disable();
+						replay();
+						return;
+					}
+					computer();
+					let end2 = checkMatch();
+					if(end2[0] && end2[1]=='O')
+					{
+						alert("Player "+end2[1]+" has won the game");
+						disable();
+						replay();
+					}
+					printBoard();	
+			}
+		}
+		
+	</script>
+</body>
+</html>
